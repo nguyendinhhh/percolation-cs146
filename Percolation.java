@@ -12,6 +12,9 @@ public class Percolation {
     // Create an N-by-N grid, with all sites blocked.
     //...
     public Percolation(int N) {
+        if (N <= 0){
+            throw new IllegalArgumentException("N must be > 0");
+        }
         size = N;
         openSites = 0;
         uf = new WeightedQuickUnionUF(N * N + 2); // with top and bottom
@@ -27,11 +30,10 @@ public class Percolation {
 
     // Open site (row, col) if it is not open already.
     public void open(int row, int col) {
-        if ((row < 0 || col < 0) && (row >= size || col >= size)) {
-            throw new IndexOutOfBoundsException("Row and col are out of bounds");
+        if (row < 0 || col < 0 || row >= size || col >= size) {
+            throw new IndexOutOfBoundsException("Row and/or col are out of bounds");
         }
 
-        
         if (!isOpen(row, col)) {
             grid[row][col] = true;
             openSites++;
@@ -64,14 +66,17 @@ public class Percolation {
 
     // Is site (row, col) open?
     public boolean isOpen(int row, int col) {
-        if ((row < 0 || col < 0) && (row >= size || col >= size)) {
-            throw new IndexOutOfBoundsException("Row and col are out of bounds");
+        if (row < 0 || col < 0 || row >= size || col >= size) {
+            throw new IndexOutOfBoundsException("Row and/or col are out of bounds");
         }
         return grid[row][col];
     }
 
     // Is site (row, col) full?
     public boolean isFull(int row, int col) {
+        if (row < 0 || col < 0 || row >= size || col >= size) {
+            throw new IndexOutOfBoundsException("Row and/or col are out of bounds");
+        }
         if (isOpen(row, col)) {
             // site (row,col) is full if uf and uf2 are connected to top
             return uf2.connected(encode(row, col), 0);
